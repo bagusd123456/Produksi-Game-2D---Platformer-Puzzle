@@ -1,0 +1,33 @@
+{
+    "name": "PlayerMovement",
+    "maps": [
+        {
+            "name": "Movement",
+            "id": "d9be3097-8643-480e-885f-71f2ae01cb90",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Value",
+                    "id": "61e24686-884c-48ab-9377-036d03a7c992",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6fcecdf6-874b-41ec-a46b-85f6e603a20f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "Normalize(max=1)",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
