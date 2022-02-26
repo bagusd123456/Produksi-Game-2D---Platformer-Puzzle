@@ -165,12 +165,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  jumpForce: 5.42
+  jumpForce: 4.5
   jumpTimeCounter: 0
   jumpTime: 0.5
   jumpMultiplier: 1.12
-  fallMultiplier: 2.05
-  lowJumpMultiplier: 1
+  fallMultiplier: 15
+  lowJumpMultiplier: 10
 --- !u!54 &390631247
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -501,12 +501,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  jumpForce: 5.42
+  jumpForce: 4.5
   jumpTimeCounter: 0
   jumpTime: 0.5
   jumpMultiplier: 1.12
-  fallMultiplier: 2.05
-  lowJumpMultiplier: 1
+  fallMultiplier: 15
+  lowJumpMultiplier: 10
 --- !u!54 &1105125901
 Rigidbody:
   m_ObjectHideFlags: 0

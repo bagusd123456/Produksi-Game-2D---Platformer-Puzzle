@@ -43,7 +43,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.Raycast(feetPos.position, Vector3.down, checkRadius, groundLayer);
+        #region Jumping
+        if (isJumping && rb.velocity.y < 0)
+        {
+            isJumping = false;
+        }
 
+        Debug.Log(rb.velocity.y);
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
@@ -57,24 +63,20 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(jumpForce * jumpMultiplier * Vector3.up);
                 jumpTimeCounter -= Time.deltaTime;
             }
-            else
+            else if (jumpTimeCounter > 0 && rb.velocity.y < 0)
             {
                 rb.velocity += (fallMultiplier - 1) * Physics.gravity.y * Time.deltaTime * Vector3.up;
-                //rb.AddForce(Vector3.up * rb.velocity.y * (1 - fallMultiplier), ForceMode.Impulse);
-
             }
         }
 
         else if (Input.GetKeyUp(KeyCode.Space))
         {
             rb.velocity += (lowJumpMultiplier - 1) * Physics.gravity.y * Time.deltaTime * Vector3.up;
-            /*if (rb.velocity.y <= 0)
-            {
-                rb.AddForce(Vector3.down * rb.velocity.y * (1 - lowJumpMultiplier), ForceMode.Impulse);
-            }*/
+            //rb.AddForce(Vector3.down * rb.velocity.y * (1 - lowJumpMultiplier), ForceMode.Impulse);
         }
-        CheckInput();
+        #endregion
 
+        CheckInput();
     }
 
     void CheckInput()
