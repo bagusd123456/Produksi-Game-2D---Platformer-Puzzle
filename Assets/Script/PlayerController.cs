@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
-        Debug.Log(rb.velocity.y);
+        //Debug.Log(rb.velocity.y);
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
