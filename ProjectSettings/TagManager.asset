@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Object
   - Item
+  - Button
+  - Event
+  - Tips
+  - Manager
+  - BGM
   layers:
   - Default
   - TransparentFX
@@ -16,7 +21,7 @@ TagManager:
   - Ground
   - Interactable
   - Player
-  - 
+  - Player2
   - 
   - 
   - 

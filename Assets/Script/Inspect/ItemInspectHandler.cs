@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ItemInspectHandler : MonoBehaviour
@@ -10,30 +11,50 @@ public class ItemInspectHandler : MonoBehaviour
     public TMP_Text tutorialText;
     public Transform tutorialPoint;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private bool isAble;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Item"))
+        if (Input.GetKeyDown(KeyCode.K) && isAble)
         {
             tutorialPanel.SetActive(true);
-            tutorialText.text = "Tekan key 'A' atau 'D' untuk bergerak ke kiri atau kekanan.";
-            //Debug.Log("Tutorial 1");
+            tutorialText.text = "Item ini adalah Indomie.";
+        }
+
+        else if(Input.GetKeyDown(KeyCode.L) && !isAble && tutorialPanel != null && tutorialPanel.activeInHierarchy == true)
+        {
+            tutorialPanel.SetActive(false);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        tutorialPanel.SetActive(false);
+        if (tutorialPanel != null && tutorialText != null && tutorialPoint != null)
+        {
+            if (collision.gameObject.CompareTag("Item"))
+            {
+                isAble = true;
+                //Debug.Log("Tutorial 1");
+            }
+
+            if (collision.gameObject.CompareTag("Tips"))
+            {
+                tutorialPanel.SetActive(true);
+                tutorialText.text = collision.gameObject.GetComponent<Text>().text;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (tutorialPanel != null && tutorialText != null && tutorialPoint != null)
+        {
+            tutorialPanel.SetActive(false);
+        }
+
+        if (collision.gameObject.CompareTag("Item"))
+        {
+            isAble = false;
+        }
     }
 }

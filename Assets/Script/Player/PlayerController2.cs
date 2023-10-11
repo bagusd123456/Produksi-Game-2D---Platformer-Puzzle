@@ -75,7 +75,7 @@ public class PlayerController2 : MonoBehaviour
         //JoystickMove();
         CheckMovementDirection();
         //UpdateAnimations();
-        //CheckIfCanJump();
+        CheckIfCanJump();
         //CheckIfWallSliding();
         //CheckDash();
         //CheckLives();

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class DoorHandler : MonoBehaviour
 {
-    [SerializeField] private Transform playerTransform;
-    private Animator anim;
-    private float timer;
+    public Animator anim;
+    public float timer;
+    [SerializeField]
+    public ButtonData buttonData;
 
     [Header("Door Setting")]
     public GameObject doorGameObject;
@@ -16,36 +17,55 @@ public class DoorHandler : MonoBehaviour
     [Header("Door Parameter")]
     public doorType _doorType = doorType.BASIC;
     [SerializeField] public enum doorType { BASIC, TRIGGER, BUTTON, KEY };
-    [SerializeField] private bool isAble;    
-    [SerializeField] private Collider[] colliderArray;
-    
+    [SerializeField] public bool isAble;    
+    [SerializeField] public Collider2D[] colliderArray;
+    [SerializeField] public GameObject[] buttonDataArray;
+    public bool flip = false;
+
+    [Header("Sound Parameter")]
+    public AudioSource audioSource;
+    public AudioClip openSound;
+    public AudioClip closeSound;
     private void Start()
     {
+        if (audioSource == null)
+            audioSource = this.gameObject.GetComponent<AudioSource>();
         anim = doorGameObject.GetComponent<Animator>();
         timer = doorTimer;
+        buttonDataArray = GameObject.FindGameObjectsWithTag("Button");
+        
+        /*if(buttonDataArray.Length != 0)
+        {
+            buttonData = buttonDataArray[0].GetComponent<ButtonData>();
+        }*/
     }
 
     // Update is called once per frame
     void Update()
     {
-        isAble = Physics.CheckSphere(gameObject.transform.position, interactRadius, 1 << 8);
-        colliderArray = Physics.OverlapSphere(gameObject.transform.position, interactRadius, 1 << 8);
+        isAble = Physics2D.OverlapCircle(gameObject.transform.position, interactRadius, 1 << 8);
+        colliderArray = Physics2D.OverlapCircleAll(gameObject.transform.position, interactRadius, 1 << 8);
+        //isAble = Physics.CheckSphere(gameObject.transform.position, interactRadius, 1 << 8);
+        //colliderArray = Physics.OverlapSphere(gameObject.transform.position, interactRadius, 1 << 8);
 
-        if(_doorType == doorType.BASIC)
+        if (_doorType == doorType.BASIC)
         {
-            if (isAble) // open using button
+            if (isAble) // on Area Can Interact
             {
                 anim.SetBool("isOpen", true);
                 //timer -= Time.time;
             }
-        }
-
-        if (timer > 0) // auto open
-        {
-            timer -= Time.deltaTime;
-            if (timer <= 0f)
+            else // auto close
             {
-                anim.SetBool("isOpen", false);
+                if(timer >= 0f)
+                {
+                    timer -= Time.deltaTime;
+                }
+
+                else if (timer <= 0f)
+                {
+                    anim.SetBool("isOpen", false);
+                }
             }
         }
 
@@ -64,26 +84,83 @@ public class DoorHandler : MonoBehaviour
                 anim.SetBool("isOpen", false);
             }
         }
+
+        if (_doorType == doorType.BUTTON && buttonData != null && buttonData.isPressed == true)
+        {
+            timer = doorTimer;
+            if(timer >= 0)
+            {
+                OpenDoor();
+            }
+            //anim.SetBool("isOpen", true);
+        }
+
+        if (_doorType == doorType.BUTTON && buttonData != null && buttonData.isPressed == false)
+        {
+            if(timer >= 0)
+            {
+                timer -= Time.deltaTime;
+            }
+            else if (timer <= 0f)
+            {
+                CloseDoor();
+            }
+            //anim.SetBool("isOpen", false);
+        }
+
+        if (flip)
+        {
+            if (anim.GetBool("isOpen"))
+            {
+                anim.SetBool("isOpen", false);
+            }
+            else
+            {
+                anim.SetBool("isOpen", true);
+            }
+        }
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OpenDoor()
     {
-        if (other.gameObject.CompareTag("Player"))
+        anim.SetBool("isOpen", true);
+    }
+
+    public void CloseDoor()
+    {
+        anim.SetBool("isOpen", false);
+    }
+
+    public void PlaySound(int number)
+    {
+        if(number == 0)
+        {
+            audioSource.PlayOneShot(openSound, 0.4f);
+        }
+        else if(number == 1)
+        {
+            audioSource.PlayOneShot(closeSound, 0.4f);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            timer = doorTimer;
+        }
+
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
         {
             timer = doorTimer;
         }
     }
 
-    public void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            timer = doorTimer;
-        }
-        
-    }
-
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         //anim.SetBool("isOpen", false);
     }

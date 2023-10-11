@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+Level[[:space:]]1[[:space:]]test.psb filter=lfs diff=lfs merge=lfs -text
+Level[[:space:]]1[[:space:]]test2.psb filter=lfs diff=lfs merge=lfs -text
+Level[[:space:]]1[[:space:]]test.tif filter=lfs diff=lfs merge=lfs -text
